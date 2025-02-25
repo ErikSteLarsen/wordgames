@@ -24,12 +24,10 @@ jobs:
 
     - name: Install dependencies
       run: |
-        cd frontend
         npm install
 
     - name: Build the React app
       run: |
-        cd frontend
         npm run build
 
 
