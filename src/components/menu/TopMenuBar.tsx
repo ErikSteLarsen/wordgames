@@ -18,7 +18,7 @@ const TopMenuBar: React.FC = () => {
 
           }}
         >
-          Exercise your brain
+          Word games
         </Typography>
 
 
