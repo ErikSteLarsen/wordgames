@@ -31,7 +31,7 @@ const WordleGame: React.FC = () => {
   const [endGameResult, setEndGameResult] = useState<GameEndState>(null);
 
   useEffect(() => {
-    returnWordsInFile("/words.txt").then((res) => {
+    returnWordsInFile("words.txt").then((res) => {
       setWords(res);
     })
   }, [])
