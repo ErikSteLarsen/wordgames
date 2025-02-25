@@ -2,7 +2,8 @@ import { CorrectPosition, LineInfo } from "../types";
 
 export const returnWordsInFile = async (filename: string) => {
     try {
-        const response = await fetch(filename);
+        //const response = await fetch(filename);
+        const response  = await fetch(`https://raw.githubusercontent.com/erikstelarsen/wordgames/gh-pages/${filename}`)
         const text = await response.text();
         return text.split(/\s+/);
     } catch (err) {
