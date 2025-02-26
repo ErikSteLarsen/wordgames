@@ -1,8 +1,7 @@
 // src/components/DayBox.tsx
-import React from 'react';
-import { Paper, TextField } from '@mui/material';
-import { LetterInfo } from '../types';
-
+import React from "react";
+import { Paper, TextField } from "@mui/material";
+import { LetterInfo } from "../../types";
 
 interface LetterBoxProps {
   index: number;
@@ -15,32 +14,39 @@ interface LetterBoxProps {
   inputRef: React.Ref<HTMLInputElement>;
 }
 
-
-const LetterBox: React.FC<LetterBoxProps> = ({ index, letterInfo, disabled, onClick, onChange, onBackspace, onKeyDown, inputRef }) => {
-
+const LetterBox: React.FC<LetterBoxProps> = ({
+  index,
+  letterInfo,
+  disabled,
+  onClick,
+  onChange,
+  onBackspace,
+  onKeyDown,
+  inputRef,
+}) => {
   const handleBeforeInput = (event: React.FormEvent<HTMLInputElement>) => {
     const input = event.nativeEvent as InputEvent;
     const key = input.data;
-    if (!/[a-zA-Z]/.test(key ? key : '')) {
+    if (!/[a-zA-Z]/.test(key ? key : "")) {
       event.preventDefault();
     }
   };
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'Backspace' && letterInfo.letter === '') {
+    if (event.key === "Backspace" && letterInfo.letter === "") {
       onBackspace(index);
     }
     onKeyDown(event);
   };
 
-  let backgroundColor = '#FFFFFF';
+  let backgroundColor = "#FFFFFF";
   if (disabled) {
     if (letterInfo.correctPosition) {
-      backgroundColor = '#6AAA64';
+      backgroundColor = "#6AAA64";
     } else if (letterInfo.correctLetter) {
-      backgroundColor = '#C9B458';
-    } else if (letterInfo.letter !== '') {
-      backgroundColor = '#787C7E';
+      backgroundColor = "#C9B458";
+    } else if (letterInfo.letter !== "") {
+      backgroundColor = "#787C7E";
     }
   }
 
@@ -50,15 +56,15 @@ const LetterBox: React.FC<LetterBoxProps> = ({ index, letterInfo, disabled, onCl
       elevation={3}
       sx={{
         p: 2,
-        textAlign: 'center',
-        width: '80px',
-        height: '80px',
-        aspectRatio: '1/1',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
+        textAlign: "center",
+        width: "80px",
+        height: "80px",
+        aspectRatio: "1/1",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
         padding: 0,
-        backgroundColor: backgroundColor
+        backgroundColor: backgroundColor,
       }}
       onClick={() => onClick()}
     >
@@ -70,11 +76,20 @@ const LetterBox: React.FC<LetterBoxProps> = ({ index, letterInfo, disabled, onCl
         onKeyDown={handleKeyDown}
         onBeforeInput={handleBeforeInput}
         inputRef={inputRef}
-        inputProps={{ maxLength: 1, style: { padding: 1, textAlign: 'center', fontSize: '30px', textTransform: 'uppercase', fontWeight: 'bold' } }}
+        inputProps={{
+          maxLength: 1,
+          style: {
+            padding: 1,
+            textAlign: "center",
+            fontSize: "30px",
+            textTransform: "uppercase",
+            fontWeight: "bold",
+          },
+        }}
         sx={{
-          '& .MuiOutlinedInput-root': {
-            '& fieldset': {
-              border: 'none',
+          "& .MuiOutlinedInput-root": {
+            "& fieldset": {
+              border: "none",
               padding: 0,
             },
           },

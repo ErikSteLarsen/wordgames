@@ -1,23 +1,22 @@
-import React from 'react';
-import WordleGame from './components/WordleGame';
-import { HashRouter, Route, Routes } from 'react-router-dom';
-import TopMenuBar from './components/menu/TopMenuBar';
-import Instructions from './components/Instructions';
-import About from './components/About';
+import React from "react";
+import WordleGame from "./components/wordlegame/WordleGame";
+import { HashRouter, Route, Routes } from "react-router-dom";
+import TopMenuBar from "./components/menu/TopMenuBar";
+import About from "./components/aboutpage/About";
+import InfoPage from "./components/infopage/InfoPage";
 
 const App: React.FC = () => {
   return (
-    <HashRouter >
+    <HashRouter>
       <div className="startPage">
         <TopMenuBar />
         <Routes>
           <Route path="/" element={<WordleGame />} />
-          <Route path="/instructions" element={<Instructions />} />
+          <Route path="/info" element={<InfoPage />} />
           <Route path="/about" element={<About />} />
         </Routes>
       </div>
     </HashRouter>
-    
   );
 };
 
