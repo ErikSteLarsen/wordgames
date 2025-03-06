@@ -6,6 +6,7 @@ import {
   CheckSolutionResponse,
   GameEndState,
   LetterInfo,
+  LetterState,
   LetterWithState,
   LineInfo,
 } from "./types";
@@ -45,7 +46,7 @@ const WordleGame: React.FC = () => {
   ]);
   const [inactiveLines, setInactiveLines] = useState<number>(5);
   const [endGameResult, setEndGameResult] = useState<GameEndState>(null);
-  const [letterStates, setLetterStates] = useState<LetterWithState[]>([]);
+  const [letterStates, setLetterStates] = useState<Map<string, LetterState>>(new Map());
 
 
   useEffect(() => {
@@ -105,130 +106,135 @@ const WordleGame: React.FC = () => {
 
         if (isCorrectLetter || isCorrectPosition) {
           console.log(isCorrectLetter, isCorrectPosition);
-          setLetterStates((prevCorrectLetters) => prevCorrectLetters?.add(letterInfo.letter))
-        } else {
-          setLetterStates((prevWrongLetters) => prevWrongLetters?.add(letterInfo.letter))
+          if (!letterStates.keys.array.forEach(element => {
+
+          }); letterInfo.letter )
+
+      // SJEKK OM DE ER UNIQUE OG SÅ ADD HVIS DEN IKKE FINNES BLABLA.
+      setLetterStates((prevCorrectLetters) => prevCorrectLetters?.add(letterInfo.letter))
+    } else {
+      setLetterStates((prevWrongLetters) => prevWrongLetters?.add(letterInfo.letter))
         }
 
-        return {
-          ...letterInfo,
-          correctPosition: isCorrectPosition,
-          correctLetter: isCorrectLetter,
-        };
+return {
+  ...letterInfo,
+  correctPosition: isCorrectPosition,
+  correctLetter: isCorrectLetter,
+};
       });
 
-      updatedWordLines[lineIndex] = currentLine;
-      return updatedWordLines;
+updatedWordLines[lineIndex] = currentLine;
+return updatedWordLines;
     });
 
-    if (res.isCorrect) {
-      gameSuccess = true;
-    } else {
-      if (maxAttemptsReached(wordLines.length)) {
-        gameOver = true;
-      }
-    }
+if (res.isCorrect) {
+  gameSuccess = true;
+} else {
+  if (maxAttemptsReached(wordLines.length)) {
+    gameOver = true;
+  }
+}
 
-    return { gameOver, gameSuccess };
+return { gameOver, gameSuccess };
   };
 
-  const lineValid = (lineInfo: LineInfo) => {
-    return lineInfo.letters.every((item) => /^[a-zA-Z]$/.test(item.letter));
-  };
+const lineValid = (lineInfo: LineInfo) => {
+  return lineInfo.letters.every((item) => /^[a-zA-Z]$/.test(item.letter));
+};
 
-  const handleOnEnter = (lineIndex: number, lineInfo: LineInfo) => {
-    if (lineValid(lineInfo)) {
-      setEndGameResult(handleCheckSolution(lineIndex, lineInfo));
-      disableCurrentLine(lineIndex, lineInfo);
-    }
-  };
+const handleOnEnter = (lineIndex: number, lineInfo: LineInfo) => {
+  if (lineValid(lineInfo)) {
+    setEndGameResult(handleCheckSolution(lineIndex, lineInfo));
+    disableCurrentLine(lineIndex, lineInfo);
+  }
+};
 
-  const maxAttemptsReached = (attempts: number) => {
-    return attempts >= maxAttempts;
-  };
+const maxAttemptsReached = (attempts: number) => {
+  return attempts >= maxAttempts;
+};
 
-  const disableCurrentLine = (lineIndex: number, lineInfo: LineInfo) => {
-    lineInfo.disabled = true;
-    setWordLines((prevWordLines) =>
-      prevWordLines.map((line, index) =>
-        index === lineIndex ? lineInfo : line
-      )
-    );
-  };
-
-  const createNewGameLine = () => {
-    const newLineInfo: LineInfo = {
-      letters: initLine.map((letter) => ({ ...letter })),
-      disabled: false,
-    };
-    setWordLines((prevWordLines) => [...prevWordLines, newLineInfo]);
-    setInactiveLines((prevInactiveLines) => prevInactiveLines - 1);
-  };
-
-  const handleResetGame = async () => {
-    const res = resetGame(words);
-    setSolution(res);
-    setWordLines(initLineInfo);
-    setEndGameResult({ gameOver: false, gameSuccess: false });
-    setInactiveLines(5);
-    setLetterStates(new Set());
-  };
-
-  return (
-    <div>
-      <Container maxWidth="xl" sx={{ display: 'flex', flexDirection: 'column', minHeight: 'calc(100vh - 40px)' }}>
-        <Title title={"Wordle"} />
-
-        {wordLines.map((line, lineIndex) => (
-          <WordLine
-            key={uuidv4()}
-            lineInfo={line}
-            onEnter={(lineInfo: LineInfo) => handleOnEnter(lineIndex, lineInfo)}
-          />
-        ))}
-
-        {Array.from({ length: inactiveLines }, (_, i) => (
-          <InactiveLine key={i + 1} />
-        ))}
-
-        <Box display={"flex"} flexDirection={"row"} padding={2} pt={5}>
-          <Paper sx={{ flexGrow: 1, marginRight: 5 }}>
-            {Array.from(correctLetters).map((item, index) => (
-              <VisualLetter letter={item} />
-
-            ))}
-          </Paper>
-
-          <Paper sx={{ flexGrow: 1 }}>
-            {Array.from(wrongLetters).map((item, index) => (
-              <div key={index}>{item}</div>
-            ))}
-          </Paper>
-        </Box>
-
-        <Box sx={{ flexGrow: 1 }} />
-
-        {endGameResult?.gameOver && (
-          <Box position="relative" textAlign="center" mt={4} mb={1}>
-            <Typography variant="h5" gutterBottom>
-              {`Solution: ${solution}`}
-            </Typography>
-          </Box>
-        )}
-        <Box textAlign="center" mt={1} mb={8}>
-          {(endGameResult?.gameOver || endGameResult?.gameSuccess) && (
-            <Button
-              variant={"contained"}
-              sx={{ backgroundColor: lightBlack, color: "white" }}
-              onClick={() => handleResetGame()}
-            >
-              {"Play again"}
-            </Button>
-          )}
-        </Box>
-      </Container>
-    </div>
+const disableCurrentLine = (lineIndex: number, lineInfo: LineInfo) => {
+  lineInfo.disabled = true;
+  setWordLines((prevWordLines) =>
+    prevWordLines.map((line, index) =>
+      index === lineIndex ? lineInfo : line
+    )
   );
+};
+
+const createNewGameLine = () => {
+  const newLineInfo: LineInfo = {
+    letters: initLine.map((letter) => ({ ...letter })),
+    disabled: false,
+  };
+  setWordLines((prevWordLines) => [...prevWordLines, newLineInfo]);
+  setInactiveLines((prevInactiveLines) => prevInactiveLines - 1);
+};
+
+const handleResetGame = async () => {
+  const res = resetGame(words);
+  setSolution(res);
+  setWordLines(initLineInfo);
+  setEndGameResult({ gameOver: false, gameSuccess: false });
+  setInactiveLines(5);
+  setLetterStates(new Set());
+};
+
+return (
+  <div>
+    <Container maxWidth="xl" sx={{ display: 'flex', flexDirection: 'column', minHeight: 'calc(100vh - 40px)' }}>
+      <Title title={"Wordle"} />
+
+      {wordLines.map((line, lineIndex) => (
+        <WordLine
+          key={uuidv4()}
+          lineInfo={line}
+          onEnter={(lineInfo: LineInfo) => handleOnEnter(lineIndex, lineInfo)}
+        />
+      ))}
+
+      {Array.from({ length: inactiveLines }, (_, i) => (
+        <InactiveLine key={i + 1} />
+      ))}
+
+      <Box display={"flex"} flexDirection={"row"} padding={2} pt={5}>
+        <Paper sx={{ flexGrow: 1, marginRight: 5 }}>
+          {Array.from(correctLetters).map((item, index) => (
+            <VisualLetter letter={item} />
+
+          ))}
+        </Paper>
+
+        <Paper sx={{ flexGrow: 1 }}>
+          {Array.from(wrongLetters).map((item, index) => (
+            <div key={index}>{item}</div>
+          ))}
+        </Paper>
+      </Box>
+
+      <Box sx={{ flexGrow: 1 }} />
+
+      {endGameResult?.gameOver && (
+        <Box position="relative" textAlign="center" mt={4} mb={1}>
+          <Typography variant="h5" gutterBottom>
+            {`Solution: ${solution}`}
+          </Typography>
+        </Box>
+      )}
+      <Box textAlign="center" mt={1} mb={8}>
+        {(endGameResult?.gameOver || endGameResult?.gameSuccess) && (
+          <Button
+            variant={"contained"}
+            sx={{ backgroundColor: lightBlack, color: "white" }}
+            onClick={() => handleResetGame()}
+          >
+            {"Play again"}
+          </Button>
+        )}
+      </Box>
+    </Container>
+  </div>
+);
 };
 
 export default WordleGame;
