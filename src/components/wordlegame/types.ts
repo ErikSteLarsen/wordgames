@@ -12,12 +12,21 @@ export type LineInfo = {
 export type CorrectPosition = { letter: string, position: number };
 
 export interface CheckSolutionResponse {
-    isCorrect: boolean;
-    correctLetters: string[];
-    correctPositions: CorrectPosition[];
-  }
+  isCorrect: boolean;
+  correctLetters: string[];
+  correctPositions: CorrectPosition[];
+}
 
 export type GameEndState = {
-    gameOver: boolean;
-    gameSuccess: boolean;
+  gameOver: boolean;
+  gameSuccess: boolean;
 } | null
+
+export enum LetterState {
+  Green, Yellow, Grey
+}
+
+export type LetterWithState = {
+  letter: string;
+  state: LetterState;
+}

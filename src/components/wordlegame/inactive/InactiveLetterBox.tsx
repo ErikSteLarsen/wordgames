@@ -1,7 +1,7 @@
 // src/components/DayBox.tsx
 import React from "react";
 import { Paper, TextField } from "@mui/material";
-import { LetterInfo } from "../../../types";
+import { LetterInfo } from "../types";
 
 interface Props {
   index: number;
@@ -17,8 +17,8 @@ const LetterBox: React.FC<Props> = ({ index, letterInfo, disabled }) => {
       sx={{
         p: 2,
         textAlign: "center",
-        width: "80px",
-        height: "80px",
+        width: "10vw",
+        height: "10vw",
         aspectRatio: "1/1",
         display: "flex",
         alignItems: "center",
@@ -36,7 +36,7 @@ const LetterBox: React.FC<Props> = ({ index, letterInfo, disabled }) => {
           style: {
             padding: 1,
             textAlign: "center",
-            fontSize: "30px",
+            fontSize: "5vw",
             textTransform: "uppercase",
             fontWeight: "bold",
           },

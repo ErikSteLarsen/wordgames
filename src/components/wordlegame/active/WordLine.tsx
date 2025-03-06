@@ -1,7 +1,7 @@
 import { Box, Container, Grid, Grid2 } from "@mui/material";
 import LetterBox from "./LetterBox";
 import { createRef, useEffect, useRef, useState } from "react";
-import { LineInfo } from "../../types";
+import { LineInfo } from "../types";
 
 interface WordLineProps {
   lineInfo: LineInfo;
@@ -60,7 +60,7 @@ const WordLine: React.FC<WordLineProps> = ({ lineInfo, onEnter }) => {
                 index={index}
                 letterInfo={letter}
                 disabled={line.disabled}
-                onClick={() => {}}
+                onClick={() => { }}
                 onChange={(index, newLetter) =>
                   handleLetterChange(index, newLetter)
                 }

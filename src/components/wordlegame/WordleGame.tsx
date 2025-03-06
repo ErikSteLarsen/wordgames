@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { Container, Typography, Button, Box } from "@mui/material";
-import WordLine from "./WordLine";
+import { Container, Typography, Button, Box, Paper } from "@mui/material";
+import WordLine from "./active/WordLine";
 import "../../style/Start.css";
 import {
   CheckSolutionResponse,
   GameEndState,
   LetterInfo,
+  LetterWithState,
   LineInfo,
-} from "../../types";
+} from "./types";
 import { v4 as uuidv4 } from "uuid";
 import Title from "./Title";
 import { lightBlack } from "../../variables/colors";
@@ -16,8 +17,9 @@ import {
   pickRandomSolutionWord,
   resetGame,
   returnWordsInFile,
-} from "../../utils/wordleUtils";
+} from "./utils/wordleUtils";
 import InactiveLine from "./inactive/InactiveLine";
+import VisualLetter from "./VisualLetter";
 
 const WordleGame: React.FC = () => {
   const initLine: LetterInfo[] = [
@@ -43,6 +45,8 @@ const WordleGame: React.FC = () => {
   ]);
   const [inactiveLines, setInactiveLines] = useState<number>(5);
   const [endGameResult, setEndGameResult] = useState<GameEndState>(null);
+  const [letterStates, setLetterStates] = useState<LetterWithState[]>([]);
+
 
   useEffect(() => {
     returnWordsInFile("words.txt").then((res) => {
@@ -97,6 +101,13 @@ const WordleGame: React.FC = () => {
           isCorrectLetter =
             res.correctLetters.includes(letterInfo.letter) &&
             !isCorrectPosition;
+        }
+
+        if (isCorrectLetter || isCorrectPosition) {
+          console.log(isCorrectLetter, isCorrectPosition);
+          setLetterStates((prevCorrectLetters) => prevCorrectLetters?.add(letterInfo.letter))
+        } else {
+          setLetterStates((prevWrongLetters) => prevWrongLetters?.add(letterInfo.letter))
         }
 
         return {
@@ -160,11 +171,12 @@ const WordleGame: React.FC = () => {
     setWordLines(initLineInfo);
     setEndGameResult({ gameOver: false, gameSuccess: false });
     setInactiveLines(5);
+    setLetterStates(new Set());
   };
 
   return (
     <div>
-      <Container maxWidth="xl">
+      <Container maxWidth="xl" sx={{ display: 'flex', flexDirection: 'column', minHeight: 'calc(100vh - 40px)' }}>
         <Title title={"Wordle"} />
 
         {wordLines.map((line, lineIndex) => (
@@ -179,14 +191,31 @@ const WordleGame: React.FC = () => {
           <InactiveLine key={i + 1} />
         ))}
 
+        <Box display={"flex"} flexDirection={"row"} padding={2} pt={5}>
+          <Paper sx={{ flexGrow: 1, marginRight: 5 }}>
+            {Array.from(correctLetters).map((item, index) => (
+              <VisualLetter letter={item} />
+
+            ))}
+          </Paper>
+
+          <Paper sx={{ flexGrow: 1 }}>
+            {Array.from(wrongLetters).map((item, index) => (
+              <div key={index}>{item}</div>
+            ))}
+          </Paper>
+        </Box>
+
+        <Box sx={{ flexGrow: 1 }} />
+
         {endGameResult?.gameOver && (
-          <Box position="relative" textAlign="center" mt={8} mb={1}>
+          <Box position="relative" textAlign="center" mt={4} mb={1}>
             <Typography variant="h5" gutterBottom>
               {`Solution: ${solution}`}
             </Typography>
           </Box>
         )}
-        <Box textAlign="center" mt={2} mb={8}>
+        <Box textAlign="center" mt={1} mb={8}>
           {(endGameResult?.gameOver || endGameResult?.gameSuccess) && (
             <Button
               variant={"contained"}
